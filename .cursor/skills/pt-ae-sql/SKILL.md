@@ -14,6 +14,10 @@ description: >-
 
 与 `ae-analysis` 配合：项目门禁、adhoc SQL 执行仍走 ae-cli；本 skill 提供 PT 的已验证语义与加速流程。
 
+**分工**：留存/LTV/漏斗/枚举/看板 SQL → `piggytycoon-sql`；机台 RTP/积分卡点验证 → `slot-economy-verification`。本 skill 只覆盖 adhoc 快取四类：付费档、登录、在线、生命周期。
+
+⚠️ **D 命名**：本 skill 生命周期 D1 = 注册当天；`piggytycoon-sql` 留存 D1 = 次日。勿混用。
+
 ## 快路径（默认）
 
 1. `project_id = 261`（piggytycoon / PT）。不要再 `project info list` 猜项目。
