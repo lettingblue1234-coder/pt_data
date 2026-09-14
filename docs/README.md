@@ -1,6 +1,17 @@
-# docs/sources
+# docs
 
-原始交接与分析材料归档。Agent 默认读 `.cursor/skills/`；这里仅在需要溯源或恢复长文时打开。
+Agent 默认读 `.cursor/skills/`。本目录放导出表、canvas 副本与溯源原文。
+
+## exports / canvases
+
+| 文件 | 内容 |
+|---|---|
+| `exports/2026-09-14-pt-habit-analysis.xlsx` | 习惯口径、结论与推送、分位明细、当地小时、D1–D3 宽表 |
+| `canvases/pt-habit-push-hours.canvas.tsx` | 登录高峰曲线 + 推送窗（副本；IDE 侧栏打开项目 `canvases/`） |
+
+## sources
+
+原始交接与分析材料归档；仅在需要溯源或恢复长文时打开。
 
 | 文件 | 内容 |
 |---|---|

@@ -23,6 +23,7 @@ cp -R .cursor/skills/* ~/.cursor/skills/
 |---|---|
 | `pt-ae-sql` | ae-cli adhoc 快取：付费美分档、登录、在线时长、生命周期 D1–D3（D1=注册当天） |
 | `piggytycoon-sql` | 数数看板 SQL：留存/LTV/ARPPU/首充复购/枚举；含踩坑与分析纪律（留存 D1=次日） |
+| `pt-habit-analysis` | 游戏习惯（登录/会话/日在线/当地高峰与推送窗）+ D1 付费次日流失（快付浅玩等） |
 | `slot-economy-verification` | 机台 RTP + 积分卡点公式验证；可跑 `scripts/checkpoint_calc.py` |
 
 ## 仓库结构
@@ -31,8 +32,11 @@ cp -R .cursor/skills/* ~/.cursor/skills/
 .cursor/skills/
   pt-ae-sql/
   piggytycoon-sql/          # + references/{templates,enums,project-context,ae-cli}
+  pt-habit-analysis/        # 习惯 + 推送窗 + D1付费次日流失
   slot-economy-verification/# + references + scripts/checkpoint_calc.py
 docs/sources/               # 交接原文归档（非 skill 运行时必需）
+docs/exports/               # Excel 等导出表
+docs/canvases/              # Canvas 源码归档（IDE 侧也可放 projects/*/canvases）
 packages/                   # 可分发的 .skill zip 包
 ```
 
