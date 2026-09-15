@@ -11,17 +11,19 @@ description: >-
 
 # PT 游戏习惯与 D1 付费次日流失
 
-本 skill 沉淀 **2026-09-14** 会话已验证口径与结论；**2026-09-15** 补齐安卓 / iOS 典型画像；同日补齐**画像 1.1 × A/B/C × 双端**占比与产品读法。取数走 `ae-cli analysis adhoc` + `pt-ae-sql`；字段以 `piggytycoon-sql` 为准。
+本 skill 沉淀 **2026-09-14** 会话已验证口径与结论；**2026-09-15** 补齐安卓 / iOS 典型画像、**画像 1.1 × A/B/C**，以及**付费卡点 × D2 流失**结案。取数走 `ae-cli analysis adhoc` + `pt-ae-sql`；字段以 `piggytycoon-sql` 为准。
 
 **交付物**
 
 | 文件 | 用途 |
 |---|---|
-| `references/2026-09-14-findings.md` | 数字表与深挖结论（含 §0.1 端画像） |
+| `references/2026-09-14-findings.md` | 数字表与深挖结论（含 §0.1 端画像、§10 付费卡点） |
 | `references/2026-09-14-persona11-abc.md` | 画像 1.1 定义、漏斗、A/B/C、双端表与读法 |
+| `references/2026-09-15-pay-checkpoint-churn.md` | 付费卡点 × D2 流失推送摘要 |
 | `docs/exports/2026-09-14-pt-habit-analysis.xlsx`（仓库根下） | Excel：口径 / 结论推送 / 分位 / 当地小时 |
 | `docs/canvases/pt-habit-push-hours.canvas.tsx` | 登录高峰曲线 + 推送窗标注 |
 | `docs/canvases/pt-persona11-abc-os.canvas.tsx` | 画像 1.1 × A/B/C × 双端 |
+| `docs/canvases/pt-pay-checkpoint-churn.canvas.tsx` | 付费卡点 × 流失结案图 |
 
 ## 默认队列与窗
 
@@ -165,7 +167,7 @@ A/B/C 占 D1 付费 **10.8 / 10.9 / 10.5%**（几乎无差）。Android **12.2%*
 
 - 卡点决定「停在哪」；D2 流失更像「玩得够不够深 / 付完就走」。  
 - 优化拆 **OKR-R（次留）** 与 **OKR-P（微氪过6）**，指标分开验收。  
-- 详表与分型定义 → `references/2026-09-14-findings.md` §5「阶段 6 分型」；Canvas → `docs/canvases/pt-pay-checkpoint-churn.canvas.tsx`。
+- 推送摘要 → `references/2026-09-15-pay-checkpoint-churn.md`；详表 → `findings.md` §10；Canvas → `docs/canvases/pt-pay-checkpoint-churn.canvas.tsx`。
 
 ## 执行
 
