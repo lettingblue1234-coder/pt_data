@@ -30,10 +30,11 @@ description: >
 |---|---|
 | 单次spin产出/概率/金币RTP是否符合预期 | `slot-base-economy.md` |
 | 积分事件节点a/b位置、卡点体验、压制感是否符合预期 | `points-race-checkpoint.md` |
-| 付费后是否"体验到明显放水"、付费水池扣减是否正确 | `points-race-checkpoint.md` 第5节 |
+| 付费后是否"体验到明显放水"、付费水池扣减是否正确 | `points-race-checkpoint.md` 第7节（含二测按 id 蓄水） |
 | 需要**实际算出**节点a/b/压制系数/付费水池的数值 | 直接调用 `scripts/checkpoint_calc.py`，不要手算，公式细节多且容易算错 |
 | 某个判断/公式到底成不成立，把握不大 | 先查 `references/open-assumptions.md`，很多细节是靠数值规律反推的，**没有被产品文档正面确认过** |
 | 讨论「为什么要膨胀 / 购买力钩子 vs 长期通胀」 | `references/economy-design-notes.md`（产品设计语境；不要代替公式验证） |
+| 二测 PRD：GiftReplace 放水、首日卡档50%、付费按id蓄水、Amp/Decay四行拆分、bet/引导 | `references/sources/feishu-二测优化-机台事件优化需求.md`（产品原文摘录；公式仍以 checkpoint / slot-base 为准） |
 | 玩家行为/付费漏斗/留存 LTV 取数 | 另开 skill `piggytycoon-sql` / `pt-ae-sql`，本 skill 只管机台与卡点数值 |
 
 ## 验证工作流（核心流程，给拉线上数据的Agent用）
@@ -61,8 +62,9 @@ description: >
 
 - `PointsRacePremiumCoef` / `PointsRaceNodeAGlobalCoef` / `PointsRaceNodeBGlobalCoef` / `PointsRaceEquityCoef`
   当前全部是占位值(=1.0/10000)，尚未做玩家分层调优。这些系数目前"没有区分度"是预期状态，不是异常。
-- 付费水池公式里"该次付费能获得的纯体力对应美元价值 × **付费金额对应系数**"——这个系数目前**没有找到对应配置表**，
-  怀疑尚未实现。验证付费水池时，如果发现这一项被跳过/恒为1，先假设是"未实现"而不是"配置错误"。
+- 付费水池：旧公式里"纯体力美元价值 × 付费金额对应系数"曾缺表；二测 PRD 改为**按付费 id 查表写入「折算后水池蓄水量」**
+  （爬塔等非体力付费也要蓄水，有体力付费同样入表）。验证时先找 pay_id→蓄水量 表；若仍只对直购体力蓄水，
+  标成「二测方案未落地」而非单纯「系数配错」。详见 `references/sources/feishu-二测优化-机台事件优化需求.md` §2.3。
 - `c.PointsRaceCommon.CheckpointK = 10000`(=100%)：卡点关当前是"判定可过关后必定放行"，
   尚未加入随机性。如果观测到"卡点关从来不会二次拦截"，这是当前默认设计，不是异常。
 - `SlotReplaceWeight` 里"双积分图标(20010007)"和"三积分图标(20010008)"两行的 `AmpCoef`/`DecayCoef`
