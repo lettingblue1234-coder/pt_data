@@ -11,17 +11,19 @@ description: >-
 
 # PT 游戏习惯与 D1 付费次日流失
 
-本 skill 沉淀 **2026-09-14** 会话已验证口径与结论；**2026-09-15** 补齐安卓 / iOS 典型画像；同日补齐**画像 1.1 × A/B/C × 双端**占比与产品读法。取数走 `ae-cli analysis adhoc` + `pt-ae-sql`；字段以 `piggytycoon-sql` 为准。
+本 skill 沉淀 **2026-09-14** 会话已验证口径与结论；**2026-09-15** 补齐安卓 / iOS 典型画像、**画像 1.1 × A/B/C**，以及**付费卡点 × D2 流失**结案。取数走 `ae-cli analysis adhoc` + `pt-ae-sql`；字段以 `piggytycoon-sql` 为准。
 
 **交付物**
 
 | 文件 | 用途 |
 |---|---|
-| `references/2026-09-14-findings.md` | 数字表与深挖结论（含 §0.1 端画像） |
+| `references/2026-09-14-findings.md` | 数字表与深挖结论（含 §0.1 端画像、§10 付费卡点） |
 | `references/2026-09-14-persona11-abc.md` | 画像 1.1 定义、漏斗、A/B/C、双端表与读法 |
+| `references/2026-09-15-pay-checkpoint-churn.md` | 付费卡点 × D2 流失推送摘要 |
 | `docs/exports/2026-09-14-pt-habit-analysis.xlsx`（仓库根下） | Excel：口径 / 结论推送 / 分位 / 当地小时 |
 | `docs/canvases/pt-habit-push-hours.canvas.tsx` | 登录高峰曲线 + 推送窗标注 |
 | `docs/canvases/pt-persona11-abc-os.canvas.tsx` | 画像 1.1 × A/B/C × 双端 |
+| `docs/canvases/pt-pay-checkpoint-churn.canvas.tsx` | 付费卡点 × 流失结案图 |
 
 ## 默认队列与窗
 
@@ -153,11 +155,19 @@ A/B/C 占 D1 付费 **10.8 / 10.9 / 10.5%**（几乎无差）。Android **12.2%*
 |---|---|
 | 付费后立即体力耗尽导致流失 | **否**。回访者更常打到 power=0 |
 | 只有流失卡在积分阶段 4 | **否**。两边首付时阶段 P50 都是 **4** |
-| 付费多少决定 D2 回访 | **否**。金额 P50 接近 |
+| 付费多少决定 D2 回访 | **否**。金额 P50 接近；各档次留≈60% |
 | 快付浅玩 / 付费后很快离开 | **强相关** |
 | 地图到达 area≥104 | **强产品假设**（回访 48% vs 流失 32%） |
+| 阶段 6「卡点空转」导致次日流失 | **否**。回访空转更多、磨更久；流失更偏浅触早退 |
+| 微氪送分「只够过 4」 | **对进度成立**（停6~70%）；**对次留脱钩** |
 | 任意事件 `curr_power=0` | **不可用**；只可谨慎看 login/logout |
 | 地图 `polt_id` | **不可用**；用 `area_id` |
+
+### 付费卡点 × 流失（产品读法）
+
+- 卡点决定「停在哪」；D2 流失更像「玩得够不够深 / 付完就走」。  
+- 优化拆 **OKR-R（次留）** 与 **OKR-P（微氪过6）**，指标分开验收。  
+- 推送摘要 → `references/2026-09-15-pay-checkpoint-churn.md`；详表 → `findings.md` §10；Canvas → `docs/canvases/pt-pay-checkpoint-churn.canvas.tsx`。
 
 ## 执行
 
