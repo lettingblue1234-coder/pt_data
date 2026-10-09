@@ -25,6 +25,7 @@ cp -R .cursor/skills/* ~/.cursor/skills/
 | `piggytycoon-sql` | 数数看板 SQL：留存/LTV/ARPPU/首充复购/枚举；含踩坑与分析纪律（留存 D1=次日） |
 | `pt-habit-analysis` | 游戏习惯（登录/会话/日在线/当地高峰与推送窗）+ D1 付费次日流失（快付浅玩等） |
 | `slot-economy-verification` | 机台 RTP + 积分卡点公式验证；可跑 `scripts/checkpoint_calc.py` |
+| `pt-config-design` | 新增/改配置工作流：飞书首页+排期 → pango 线上配置/SVN → 客户端代码 → PT开发小助手 → AE 取数；含首日三段式礼包清单 |
 
 ## 仓库结构
 
@@ -33,6 +34,7 @@ cp -R .cursor/skills/* ~/.cursor/skills/
   pt-ae-sql/
   piggytycoon-sql/          # + references/{templates,enums,project-context,ae-cli}
   pt-habit-analysis/        # 习惯 + 推送窗 + D1付费次日流失
+  pt-config-design/         # 配置设计工作流 + references/first-day-three-tier-gift.md
   slot-economy-verification/# + references + scripts/checkpoint_calc.py
 docs/sources/               # 交接原文归档（非 skill 运行时必需）
 docs/exports/               # Excel 等导出表
