@@ -1,0 +1,54 @@
+---
+description: 用户提到“返比”（返还比例/返奖比）时，先查飞书知识库再回答
+alwaysApply: true
+---
+
+# 返比 → 查飞书知识库
+
+只要用户提到「返比」，回答或写 SQL 之前，必须先读飞书知识库里的返比文档，以文档中的定义、口径和数值为准；不要凭仓库内的 skill 或经验推测返比口径。
+
+## 入口（直接定位，不要全库搜索）
+
+知识库首页：https://forever9.feishu.cn/wiki/LLScwqADgiwM1Rkap8ScghfZnEg（space_id `7687529577291189217`，首页末尾有「统一口径」一段）。
+
+返比问题优先直接读下面的文档（docx 用 obj_token 调 `raw_content`）：
+
+| 文档 | node_token | obj_token | 用途 |
+|---|---|---|---|
+| 基础投放 / 礼包返比总表 | `LYr2wfHetiRprHkoTKXcRVJ2nOb` | `L4opdgQyso96NIxnvfocZsX6nZf` | **返比口径 + 各礼包返比（主入口）** |
+| 基础投放 / 商城基础价格对照表（sheet） | `NoarwTAeZi6OgQkP3QvcwY40n3g` | `BmNtsfLVKhNtiKtEDRVchmwCnHg` | 体力/代币价值锚点，反推代币数量 |
+| 基础投放 / 弹出表 | `Ue2bwzN1ji0yzDkQaEycEJ2xnkc` | `OEsmdTgxxoRxbcxt3Gacv8u2nng` | 强弹优先级（按返比排序） |
+| 基础投放 / 价格逻辑优化需求（2026-10-08） | `EqBlwhPTnig9BbkpyMYcSOSvnNc` | `QWDCd8Kowo3pZQxM6lHcXNefnab` | 最新定价调整 |
+| 活动设计（金字塔 / Counter 砍价 / 皮纳塔） | `YCJ7wv342iS1sykd4FdcTxoVnvd` | `ILXcdUuEdoFV2fx7DhDcZjfxncb` | 活动礼包数值方案 |
+
+文档会更新，每次都现读，不要用记忆里的数字。上表找不到时，再从首页递归列子节点按标题查找。
+
+## 访问方式
+
+环境变量 `LARKSUITE_CLI_APP_ID` / `LARKSUITE_CLI_APP_SECRET` 是飞书自建应用凭证（Cloud Agents > Secrets）。
+
+```bash
+TOK=$(curl -s -X POST https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal \
+  -H 'Content-Type: application/json' \
+  -d "{\"app_id\":\"$LARKSUITE_CLI_APP_ID\",\"app_secret\":\"$LARKSUITE_CLI_APP_SECRET\"}" \
+  | python3 -c 'import sys,json;print(json.load(sys.stdin)["tenant_access_token"])')
+H="Authorization: Bearer $TOK"
+API=https://open.feishu.cn/open-apis
+
+# 1. 解析节点：拿到 space_id、obj_type（docx/sheet/bitable）、obj_token、has_child
+curl -s "$API/wiki/v2/spaces/get_node?token=LLScwqADgiwM1Rkap8ScghfZnEg" -H "$H"
+
+# 2. 按 obj_type 读内容
+curl -s "$API/docx/v1/documents/<obj_token>/raw_content" -H "$H"                  # docx
+curl -s "$API/sheets/v3/spreadsheets/<obj_token>/sheets/query" -H "$H"            # sheet：列出工作表
+curl -s "$API/sheets/v2/spreadsheets/<obj_token>/values/<sheet_id>" -H "$H"       # sheet：读取工作表数据
+curl -s "$API/bitable/v1/apps/<obj_token>/tables" -H "$H"                         # bitable：列出数据表
+
+# 3. 有子节点时
+curl -s "$API/wiki/v2/spaces/<space_id>/nodes?parent_node_token=LLScwqADgiwM1Rkap8ScghfZnEg&page_size=50" -H "$H"
+```
+
+## 读不到时
+
+- `code 131006`（node permission denied）：应用没有该文档的阅读权限。告诉用户在这篇文档右上角「…→ 更多 → 添加文档应用」添加该应用，或在所属知识库「设置 → 成员」中把应用加为成员（可阅读）。
+- 文档里没有所需口径：明确告诉用户没找到，不要编造；请用户补充文档链接。
