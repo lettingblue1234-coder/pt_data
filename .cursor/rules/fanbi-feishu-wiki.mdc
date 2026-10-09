@@ -1,0 +1,33 @@
+---
+description: 用户提到“返比”（返还比例/返奖比）时，先查飞书知识库再回答
+alwaysApply: true
+---
+
+# 返比 → 查飞书知识库
+
+只要用户提到「返比」，回答或写 SQL 之前，必须先到飞书知识库里检索相关文档，以文档中的定义、口径和数值为准；不要凭仓库内的 skill 或经验推测返比口径。
+
+## 访问方式
+
+环境变量 `LARKSUITE_CLI_APP_ID` / `LARKSUITE_CLI_APP_SECRET` 是飞书自建应用凭证（Cloud Agents > Secrets）。
+
+```bash
+TOK=$(curl -s -X POST https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal \
+  -H 'Content-Type: application/json' \
+  -d "{\"app_id\":\"$LARKSUITE_CLI_APP_ID\",\"app_secret\":\"$LARKSUITE_CLI_APP_SECRET\"}" \
+  | python3 -c 'import sys,json;print(json.load(sys.stdin)["tenant_access_token"])')
+
+# 列出应用可见的知识空间
+curl -s "https://open.feishu.cn/open-apis/wiki/v2/spaces?page_size=50" -H "Authorization: Bearer $TOK"
+# 列出空间节点（含子节点用 parent_node_token）
+curl -s "https://open.feishu.cn/open-apis/wiki/v2/spaces/<space_id>/nodes?page_size=50" -H "Authorization: Bearer $TOK"
+# 读取 docx 正文（obj_type=docx 时用节点的 obj_token）
+curl -s "https://open.feishu.cn/open-apis/docx/v1/documents/<obj_token>/raw_content" -H "Authorization: Bearer $TOK"
+```
+
+在节点标题和正文里搜索「返比」及相关词（返还、返奖、RTP、回报率）。
+
+## 查不到时
+
+- 空间列表为空：应用还没被加入知识库，告诉用户需要在飞书知识库「设置 → 成员」里把该应用添加为成员（至少可阅读）。
+- 找不到相关文档：明确告诉用户知识库里没有找到，不要编造口径；可以请用户提供具体的知识库/文档链接。
