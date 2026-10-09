@@ -9,10 +9,19 @@ alwaysApply: true
 
 ## 入口（直接定位，不要全库搜索）
 
-- 链接：https://forever9.feishu.cn/wiki/LLScwqADgiwM1Rkap8ScghfZnEg
-- wiki node token：`LLScwqADgiwM1Rkap8ScghfZnEg`
+知识库首页：https://forever9.feishu.cn/wiki/LLScwqADgiwM1Rkap8ScghfZnEg（space_id `7687529577291189217`，首页末尾有「统一口径」一段）。
 
-先读这个节点本身；若它下面有子节点，再按标题挑与返比相关的子节点读取。
+返比问题优先直接读下面的文档（docx 用 obj_token 调 `raw_content`）：
+
+| 文档 | node_token | obj_token | 用途 |
+|---|---|---|---|
+| 基础投放 / 礼包返比总表 | `LYr2wfHetiRprHkoTKXcRVJ2nOb` | `L4opdgQyso96NIxnvfocZsX6nZf` | **返比口径 + 各礼包返比（主入口）** |
+| 基础投放 / 商城基础价格对照表（sheet） | `NoarwTAeZi6OgQkP3QvcwY40n3g` | `BmNtsfLVKhNtiKtEDRVchmwCnHg` | 体力/代币价值锚点，反推代币数量 |
+| 基础投放 / 弹出表 | `Ue2bwzN1ji0yzDkQaEycEJ2xnkc` | `OEsmdTgxxoRxbcxt3Gacv8u2nng` | 强弹优先级（按返比排序） |
+| 基础投放 / 价格逻辑优化需求（2026-10-08） | `EqBlwhPTnig9BbkpyMYcSOSvnNc` | `QWDCd8Kowo3pZQxM6lHcXNefnab` | 最新定价调整 |
+| 活动设计（金字塔 / Counter 砍价 / 皮纳塔） | `YCJ7wv342iS1sykd4FdcTxoVnvd` | `ILXcdUuEdoFV2fx7DhDcZjfxncb` | 活动礼包数值方案 |
+
+文档会更新，每次都现读，不要用记忆里的数字。上表找不到时，再从首页递归列子节点按标题查找。
 
 ## 访问方式
 
