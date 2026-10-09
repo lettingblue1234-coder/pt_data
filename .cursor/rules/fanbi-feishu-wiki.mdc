@@ -5,7 +5,14 @@ alwaysApply: true
 
 # 返比 → 查飞书知识库
 
-只要用户提到「返比」，回答或写 SQL 之前，必须先到飞书知识库里检索相关文档，以文档中的定义、口径和数值为准；不要凭仓库内的 skill 或经验推测返比口径。
+只要用户提到「返比」，回答或写 SQL 之前，必须先读飞书知识库里的返比文档，以文档中的定义、口径和数值为准；不要凭仓库内的 skill 或经验推测返比口径。
+
+## 入口（直接定位，不要全库搜索）
+
+- 链接：https://forever9.feishu.cn/wiki/LLScwqADgiwM1Rkap8ScghfZnEg
+- wiki node token：`LLScwqADgiwM1Rkap8ScghfZnEg`
+
+先读这个节点本身；若它下面有子节点，再按标题挑与返比相关的子节点读取。
 
 ## 访问方式
 
@@ -16,18 +23,23 @@ TOK=$(curl -s -X POST https://open.feishu.cn/open-apis/auth/v3/tenant_access_tok
   -H 'Content-Type: application/json' \
   -d "{\"app_id\":\"$LARKSUITE_CLI_APP_ID\",\"app_secret\":\"$LARKSUITE_CLI_APP_SECRET\"}" \
   | python3 -c 'import sys,json;print(json.load(sys.stdin)["tenant_access_token"])')
+H="Authorization: Bearer $TOK"
+API=https://open.feishu.cn/open-apis
 
-# 列出应用可见的知识空间
-curl -s "https://open.feishu.cn/open-apis/wiki/v2/spaces?page_size=50" -H "Authorization: Bearer $TOK"
-# 列出空间节点（含子节点用 parent_node_token）
-curl -s "https://open.feishu.cn/open-apis/wiki/v2/spaces/<space_id>/nodes?page_size=50" -H "Authorization: Bearer $TOK"
-# 读取 docx 正文（obj_type=docx 时用节点的 obj_token）
-curl -s "https://open.feishu.cn/open-apis/docx/v1/documents/<obj_token>/raw_content" -H "Authorization: Bearer $TOK"
+# 1. 解析节点：拿到 space_id、obj_type（docx/sheet/bitable）、obj_token、has_child
+curl -s "$API/wiki/v2/spaces/get_node?token=LLScwqADgiwM1Rkap8ScghfZnEg" -H "$H"
+
+# 2. 按 obj_type 读内容
+curl -s "$API/docx/v1/documents/<obj_token>/raw_content" -H "$H"                  # docx
+curl -s "$API/sheets/v3/spreadsheets/<obj_token>/sheets/query" -H "$H"            # sheet：列出工作表
+curl -s "$API/sheets/v2/spreadsheets/<obj_token>/values/<sheet_id>" -H "$H"       # sheet：读取工作表数据
+curl -s "$API/bitable/v1/apps/<obj_token>/tables" -H "$H"                         # bitable：列出数据表
+
+# 3. 有子节点时
+curl -s "$API/wiki/v2/spaces/<space_id>/nodes?parent_node_token=LLScwqADgiwM1Rkap8ScghfZnEg&page_size=50" -H "$H"
 ```
 
-在节点标题和正文里搜索「返比」及相关词（返还、返奖、RTP、回报率）。
+## 读不到时
 
-## 查不到时
-
-- 空间列表为空：应用还没被加入知识库，告诉用户需要在飞书知识库「设置 → 成员」里把该应用添加为成员（至少可阅读）。
-- 找不到相关文档：明确告诉用户知识库里没有找到，不要编造口径；可以请用户提供具体的知识库/文档链接。
+- `code 131006`（node permission denied）：应用没有该文档的阅读权限。告诉用户在这篇文档右上角「…→ 更多 → 添加文档应用」添加该应用，或在所属知识库「设置 → 成员」中把应用加为成员（可阅读）。
+- 文档里没有所需口径：明确告诉用户没找到，不要编造；请用户补充文档链接。
